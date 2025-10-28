@@ -1,4 +1,4 @@
-from nautobot.extras.jobs import Job
+from nautobot.extras.jobs import Job, register_jobs
 
 
 class MyFirstJob(Job):
@@ -8,3 +8,7 @@ class MyFirstJob(Job):
     def run(self, data, commit):
         self.log_info(message="Hello from My First Nautobot Job!")
         return "Job completed successfully."
+
+register_jobs(
+    MyFirstJob,
+)
