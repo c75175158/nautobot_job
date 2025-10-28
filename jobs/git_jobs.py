@@ -6,7 +6,7 @@ class MyFirstJob(Job):
     description = "A simple example job."
 
     def run(self):
-        self.log_info(message="Hello from My First Nautobot Job!")
+        self.logger.info(f"Hello from My First Nautobot Job!")
         return "Job completed successfully."
 
 register_jobs(
