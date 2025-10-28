@@ -1,19 +1,10 @@
-from nautobot.apps.jobs import Job, register_jobs
-
-# new
-name = "Hello World Nautobot Jobs"
+from nautobot.extras.jobs import Job
 
 
-class HelloJobs(Job):
-    # new
-    class Meta:
-        name = "Hello Jobs"
-        description = "Hello World for first Nautobot Jobs"
+class MyFirstJob(Job):
+    name = "My First Nautobot Job"
+    description = "A simple example job."
 
-    def run(self):
-        self.logger.debug("Hello, this is my first Nautobot Job.")
-
-
-register_jobs(
-    HelloJobs,
-)
+    def run(self, data, commit):
+        self.log_info(message="Hello from My First Nautobot Job!")
+        return "Job completed successfully."
