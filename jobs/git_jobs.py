@@ -1,4 +1,4 @@
-from nautobot.extras.jobs import Job, register_jobs
+from nautobot.apps.jobs import Job, register_jobs
 
 
 class MyFirstJob(Job):
