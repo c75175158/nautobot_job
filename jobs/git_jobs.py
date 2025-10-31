@@ -50,7 +50,7 @@ class ImportLocationTypes(Job):
                 LocationType.objects.create(**payload)
 
             except Exception as e:
-                self.logging.info(e)
+                self.logger.info(e)
                 pass
 
             # self.logger.info(f"State: {name}")
