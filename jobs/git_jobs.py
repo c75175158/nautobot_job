@@ -37,7 +37,7 @@ class ImportLocationTypes(Job):
                 ne_stable = contents[3]
                 content_type = re.findall(pattern, line)
 
-                parent_obj = LocationType.objects.get(name=contents[0])
+                parent_obj = LocationType.objects.get_or_create(name=contents[0])
 
                 self.logger.info(parent_obj)
                 self.logger.info(content_type)
@@ -55,7 +55,7 @@ class ImportLocationTypes(Job):
                 self.logger.info(payload)
 
                 if not parent_obj:
-                    LocationType.objects.get_or_create(**payload)
+                    LocationType.objects.update(**payload)
 
             except Exception as e:
                 self.logger.info(f'Failed to parse line "{e}"', exc_info=True)
