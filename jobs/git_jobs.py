@@ -40,7 +40,7 @@ class ImportLocationTypes(Job):
 
             LocationType.objects.create(**payload)
 
-            self.logger.info(Location.objects.get(name=name))
+            self.logger.info(LocationType.objects.get(name=name))
 
             # self.logger.info(f"State: {name}")
             # self.logger.info(f"City: {description}")
