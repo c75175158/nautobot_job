@@ -58,16 +58,8 @@ class ImportLocationTypes(Job):
                     LocationType.objects.create(**payload)
 
             except Exception as e:
-                self.logger.info(e)
+                self.logger.info(f'Failed to parse line "{e}"')
                 continue
-
-            # self.logger.info(f"State: {name}")
-            # self.logger.info(f"City: {description}")
-            # self.logger.info(f"DC type: {type}")
-            # self.logger.info(f"Branch: {ne_stable}")
-            # self.logger.info(f"Branch: {parent_type}")
-            # self.logger.info(f"Branch: {parent_descr}")
-
 
 register_jobs(
     ImportLocationTypes,
