@@ -52,7 +52,9 @@ class ImportLocationTypes(Job):
                     payload["content_types"] = content_type[0].split(",")
 
                 self.logger.info(payload)
-                LocationType.objects.create(**payload)
+
+                if not parent_obj:
+                    LocationType.objects.create(**payload)
 
             except Exception as e:
                 self.logger.info(e)
