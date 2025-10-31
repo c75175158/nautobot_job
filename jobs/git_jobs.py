@@ -37,7 +37,9 @@ class ImportLocationTypes(Job):
             }
 
             self.logger.info(payload)
-            LocationType.objects.create(**payload)
+
+            if not LocationType.objects.filter(name=parent_type).exists():
+                LocationType.objects.create(**payload)
 
             # self.logger.info(f"State: {name}")
             # self.logger.info(f"City: {description}")
