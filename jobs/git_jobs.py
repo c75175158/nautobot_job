@@ -37,10 +37,10 @@ class ImportLocationTypes(Job):
                 ne_stable = contents[3]
                 content_type = re.findall(pattern, line)
                 parent_obj = LocationType.objects.get_or_create(name=parent_type)
-
+                self.logger.info(parent_obj)
                 payload =  {
                      "name":  contents[0],
-                     "parent": parent_obj if parent_type != 'NoObject' else None,
+                     "parent": parent_obj if parent_type  else None,
                      "nestable": convert[ne_stable],
                 }
 
