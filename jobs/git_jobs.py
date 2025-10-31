@@ -1,5 +1,5 @@
 from nautobot.apps.jobs import Job, register_jobs, FileVar
-from nautobot.dcim.models import Device, Location, DeviceType
+from nautobot.dcim.models import Device, Location, DeviceType, LocationType
 from nautobot.extras.models import Role, Status
 
 
@@ -38,7 +38,7 @@ class ImportLocationTypes(Job):
 
             self.logger.info(payload)
 
-            Location.location_type.create(**payload)
+            LocationType.objects.create(**payload)
 
             self.logger.info(Location.objects.get(name=name))
 
