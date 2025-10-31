@@ -13,6 +13,7 @@ class ImportLocationTypes(Job):
     )
 
     def run(self, file):
+
         file_contents = file.read().decode("utf-8")
         self.logger.info(file_contents)
         lines = file_contents.splitlines()
@@ -20,7 +21,7 @@ class ImportLocationTypes(Job):
 
         self.logger.info("Parsing of the lines")
 
-        for line in lines[1:]:
+        for line in lines:
             state, city, data_center, branch = line.split(",")
             # test = Location.location_type.create(name=location_name)
 
