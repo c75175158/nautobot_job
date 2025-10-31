@@ -41,6 +41,7 @@ class ImportLocationTypes(Job):
 
                 self.logger.info(parent_obj)
                 self.logger.info(content_type)
+                self.logger.info(contents[0])
 
                 payload =  {
                      "name":  contents[0],
