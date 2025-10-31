@@ -37,7 +37,8 @@ class ImportLocationTypes(Job):
                 ne_stable = contents[3]
                 content_type = re.findall(pattern, line)
 
-                parent_obj = LocationType.objects.get(name=parent_type)
+                parent_obj = LocationType.objects.get(name=contents[0])
+
                 self.logger.info(parent_obj)
                 self.logger.info(content_type)
 
@@ -48,7 +49,7 @@ class ImportLocationTypes(Job):
                 }
 
                 if content_type:
-                    payload["content_types"] = content_type
+                    payload["content_types"] = content_type[0].split(",")
 
                 self.logger.info(payload)
                 LocationType.objects.create(**payload)
