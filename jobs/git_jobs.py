@@ -31,13 +31,12 @@ class ImportLocationTypes(Job):
             payload ={
                 "name":  name,
                 "slug": name,
-                "parent": parent_type,
+                "parent": parent_type if parent_type != 'NoObject' else None,
                 "ne_stable": ne_stable,
                 "content_types": content_type.split(',')
             }
 
             self.logger.info(payload)
-
             LocationType.objects.create(**payload)
 
             self.logger.info(LocationType.objects.get(name=name))
