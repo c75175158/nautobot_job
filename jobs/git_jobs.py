@@ -42,8 +42,6 @@ class ImportLocationTypes(Job):
             self.logger.info(payload)
             LocationType.objects.get_or_create(**payload)
 
-            self.logger.info(LocationType.objects.get(name=name))
-
             # self.logger.info(f"State: {name}")
             # self.logger.info(f"City: {description}")
             # self.logger.info(f"DC type: {type}")
