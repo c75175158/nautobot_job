@@ -32,7 +32,7 @@ class ImportLocationTypes(Job):
                 "name":  name,
                 "slug": name,
                 "parent": parent_type,
-                "nestable": ne_stable,
+                "ne_stable": ne_stable,
                 "content_types": content_type.split(',')
             }
 
