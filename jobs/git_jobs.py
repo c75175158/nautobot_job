@@ -20,7 +20,9 @@ class ImportLocationTypes(Job):
         self.logger.info(lines)
 
         self.logger.info("Parsing of the lines")
-        convert = {'TRUE': True, 'FALSE': False}
+
+        convert = {'TRUE': True, 'FALSE': False, 'true': True, 'false': False}
+
         for line in lines[1:]:
 
             self.logger.info(line)
