@@ -31,15 +31,19 @@ class ImportLocationTypes(Job):
 
                 name, description, content_type, ne_stable, parent_type, parent_descr = line.split(",")
                 # test = Location.location_type.create(name=location_name)
-                payload =  {
-                    "name":  name,
-                    "parent": parent_type if parent_type != 'NoObject' else None,
-                    "nestable": convert[ne_stable],
-                }
 
-                self.logger.info(payload)
+                existing_type = LocationType.objects.get(name=parent_type)
 
-                LocationType.objects.create(**payload)
+                if not existing_type:
+
+                    payload =  {
+                        "name":  name,
+                        "parent": parent_type if parent_type != 'NoObject' else None,
+                        "nestable": convert[ne_stable],
+                    }
+
+                    self.logger.info(payload)
+                    LocationType.objects.create(**payload)
 
             except Exception as e:
                 pass
