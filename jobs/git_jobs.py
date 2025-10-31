@@ -30,9 +30,8 @@ class ImportLocationTypes(Job):
 
             payload ={
                 "name":  name,
-                "slug": name,
                 "parent": parent_type if parent_type != 'NoObject' else None,
-                "ne_stable": ne_stable,
+                "nestable": ne_stable,
             }
 
             self.logger.info(payload)
