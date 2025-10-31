@@ -21,7 +21,10 @@ class ImportLocationTypes(Job):
 
         self.logger.info("Parsing of the lines")
 
-        for line in lines[1:]:
+        for line in lines:
+
+            self.logger.info(line)
+
             name, description, type, ne_stable, parent_type, parent_descr = line.split(",")
             # test = Location.location_type.create(name=location_name)
 
