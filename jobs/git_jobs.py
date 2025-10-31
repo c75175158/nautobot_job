@@ -35,7 +35,6 @@ class ImportLocationTypes(Job):
                 'defaults': {
                     "parent": parent_type if parent_type != 'NoObject' else None,
                     "nestable": convert[ne_stable],
-                    "content_types": content_type.split(" ")if content_type != 'NoObject' else [],
                 }
 
             }
