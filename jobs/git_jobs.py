@@ -21,15 +21,16 @@ class ImportLocationTypes(Job):
 
         self.logger.info("Parsing of the lines")
 
-        for line in lines:
-            state, city, data_center, branch = line.split(",")
+        for line in lines[1:]:
+            name, description, type, ne_stable, parent_type, parent_descr = line.split(",")
             # test = Location.location_type.create(name=location_name)
 
-            self.logger.info(f"State: {state}")
-            self.logger.info(f"City: {city}")
-            self.logger.info(f"DC type: {data_center}")
-            self.logger.info(f"Branch: {branch}")
-
+            self.logger.info(f"State: {name}")
+            self.logger.info(f"City: {description}")
+            self.logger.info(f"DC type: {type}")
+            self.logger.info(f"Branch: {ne_stable}")
+            self.logger.info(f"Branch: {parent_type}")
+            self.logger.info(f"Branch: {parent_descr}")
 
         return "Execution completed"
 
