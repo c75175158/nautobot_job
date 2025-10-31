@@ -58,7 +58,7 @@ class ImportLocationTypes(Job):
                     LocationType.objects.create(**payload)
 
             except Exception as e:
-                self.logger.info(f'Failed to parse line "{e}"')
+                self.logger.info(f'Failed to parse line "{e}"', exc_info=True)
                 continue
 
 register_jobs(
