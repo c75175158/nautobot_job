@@ -20,7 +20,7 @@ class ImportLocationTypes(Job):
         self.logger.info(lines)
 
         self.logger.info("Parsing of the lines")
-
+        convert = {'TRUE': True, 'FALSE': False}
         for line in lines[1:]:
 
             self.logger.info(line)
@@ -31,7 +31,7 @@ class ImportLocationTypes(Job):
             payload ={
                 "name":  name,
                 "parent": parent_type if parent_type != 'NoObject' else None,
-                "nestable": ne_stable,
+                "nestable": convert[ne_stable],
             }
 
             self.logger.info(payload)
