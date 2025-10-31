@@ -25,12 +25,12 @@ class ImportLocationTypes(Job):
 
         for line in lines[1:]:
 
-            self.logger.info(line)
-
-            name, description, content_type, ne_stable, parent_type, parent_descr = line.split(",")
-            # test = Location.location_type.create(name=location_name)
-
             try:
+
+                self.logger.info(line)
+
+                name, description, content_type, ne_stable, parent_type, parent_descr = line.split(",")
+                # test = Location.location_type.create(name=location_name)
                 payload =  {
                     "name":  name,
                     "parent": parent_type if parent_type != 'NoObject' else None,
