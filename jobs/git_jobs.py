@@ -21,7 +21,7 @@ class ImportLocationTypes(Job):
 
         self.logger.info("Parsing of the lines")
 
-        for line in lines:
+        for line in lines[1:]:
 
             self.logger.info(line)
 
