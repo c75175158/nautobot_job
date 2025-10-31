@@ -36,7 +36,7 @@ class ImportLocationTypes(Job):
                 "content_types": content_type.split(',')
             }
 
-            Location.objects.create(**payload)
+            Location.location_type.create(**payload)
 
             self.logger.info(Location.objects.get(name=name))
 
