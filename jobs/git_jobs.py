@@ -1,3 +1,5 @@
+import logging
+
 from nautobot.apps.jobs import Job, register_jobs, FileVar
 from nautobot.dcim.models import Device, Location, DeviceType, LocationType
 from nautobot.extras.models import Role, Status
@@ -34,20 +36,21 @@ class ImportLocationTypes(Job):
 
                 existing_type = LocationType.objects.get(name=parent_type)
 
-                if not existing_type:
+                self.logger.info(existing_type)
 
-                    payload =  {
-                        "name":  name,
-                        "defaults" : {
-                           "parent": parent_type if parent_type != 'NoObject' else None,
-                           "nestable": convert[ne_stable],
-                       }
-                    }
+                payload =  {
+                    "name":  name,
+                    "defaults" : {
+                       "parent": parent_type if parent_type != 'NoObject' else None,
+                       "nestable": convert[ne_stable],
+                   }
+                }
 
-                    self.logger.info(payload)
-                    LocationType.objects.create(**payload)
+                self.logger.info(payload)
+                LocationType.objects.create(**payload)
 
             except Exception as e:
+                self.logging.info(e)
                 pass
 
             # self.logger.info(f"State: {name}")
