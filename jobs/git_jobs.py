@@ -33,7 +33,6 @@ class ImportLocationTypes(Job):
                 "slug": name,
                 "parent": parent_type if parent_type != 'NoObject' else None,
                 "ne_stable": ne_stable,
-                "content_types": content_type.split(',')
             }
 
             self.logger.info(payload)
