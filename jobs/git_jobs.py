@@ -1,4 +1,5 @@
 import logging
+import re
 
 from nautobot.apps.jobs import Job, register_jobs, FileVar
 from nautobot.dcim.models import Device, Location, DeviceType, LocationType
@@ -30,14 +31,14 @@ class ImportLocationTypes(Job):
             try:
 
                 self.logger.info(line)
-
-                name, description, content_type, ne_stable, parent_type, parent_descr = line.split(",")
-                existing_type = LocationType.objects.get(name=parent_type)
-
-                self.logger.info(existing_type)
+                pattern = r'"(.*?)"'
+                contents = line.split(",")
+                parent_type = contents[4]
+                ne_stable = contents[3]
+                content_type = re.findall(pattern, line)
 
                 payload =  {
-                     "name":  name,
+                     "name":  contents[0],
                      "parent": parent_type if parent_type != 'NoObject' else None,
                      "nestable": convert[ne_stable],
                 }
