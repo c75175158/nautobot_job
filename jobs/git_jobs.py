@@ -55,7 +55,7 @@ class ImportLocationTypes(Job):
                         "nestable": convert[ne_stable],
                     }
 
-                    if content_type:
+                    if content_type != 'NoObject':
                         payload["content_types"] = content_type[0].split(",")
 
                     LocationType.objects.create(**payload)
@@ -64,14 +64,14 @@ class ImportLocationTypes(Job):
 
                     self.logger.info('No Object')
 
-                    if not parent_type[1]:
+                    if not parent_type[1] and parent_type != 'NoObject':
 
                         payload = {
                             "name": contents[0],
                             "nestable": convert[ne_stable],
                         }
 
-                        if content_type:
+                        if content_type != 'NoObject':
                             payload["content_types"] = content_type[0].split(",")
 
                         LocationType.objects.create(**payload)
