@@ -28,59 +28,56 @@ class ImportLocationTypes(Job):
 
         for line in lines[1:]:
 
-            try:
 
-                self.logger.info(line)
-                payload = {}
-                pattern = r'"(.*?)"'
-                contents = line.split(",")
-                parent_type = contents[4]
-                ne_stable = contents[3]
-                content_type = re.findall(pattern, line)
+            self.logger.info(line)
+            payload = {}
+            pattern = r'"(.*?)"'
+            contents = line.split(",")
+            parent_type = contents[4]
+            ne_stable = contents[3]
+            content_type = re.findall(pattern, line)
 
-                # child_object = LocationType.objects.get_or_create(name=contents[0])
-                parent_obj = LocationType.objects.get_or_create(name=parent_type)
+            # child_object = LocationType.objects.get_or_create(name=contents[0])
+            parent_obj = LocationType.objects.get_or_create(name=parent_type)
 
-                self.logger.info(content_type)
-                self.logger.info(contents[0])
-                self.logger.info(parent_obj[1])
+            self.logger.info(content_type)
+            self.logger.info(contents[0])
+            self.logger.info(parent_obj[1])
 
-                if parent_type != 'NoObject':
+            if parent_type != 'NoObject':
 
-                    self.logger.info('No Parent Type')
+                self.logger.info('No Parent Type')
+
+                payload = {
+                    "name": contents[0],
+                    "parent": LocationType.objects.get(name=parent_type),
+                    "nestable": convert[ne_stable],
+                }
+
+                # if content_type != 'NoObject':
+                #     if len(content_type) > 0:
+                #         payload["content_types"] = content_type[0].split(",")
+
+                LocationType.objects.create(**payload)
+
+            else:
+
+                self.logger.info('No Object')
+
+                if not parent_type[1] and parent_type != 'NoObject':
 
                     payload = {
                         "name": contents[0],
-                        "parent": LocationType.objects.get(name=parent_type),
                         "nestable": convert[ne_stable],
                     }
 
-                    # if content_type != 'NoObject':
-                    #     if len(content_type) > 0:
-                    #         payload["content_types"] = content_type[0].split(",")
+                    if content_type != 'NoObject':
+                        if len(content_type) > 0:
+                            payload["content_types"] = content_type[0].split(",")
 
                     LocationType.objects.create(**payload)
 
-                else:
 
-                    self.logger.info('No Object')
-
-                    if not parent_type[1] and parent_type != 'NoObject':
-
-                        payload = {
-                            "name": contents[0],
-                            "nestable": convert[ne_stable],
-                        }
-
-                        if content_type != 'NoObject':
-                            if len(content_type) > 0:
-                                payload["content_types"] = content_type[0].split(",")
-
-                        LocationType.objects.create(**payload)
-
-            except Exception as e:
-                self.logger.info(f'Failed to parse line "{e}"', exc_info=True)
-                continue
 
 register_jobs(
     ImportLocationTypes,
