@@ -29,7 +29,6 @@ class ImportLocationTypes(Job):
 
         for line in lines[1:]:
 
-
             self.logger.info(line)
             contents = line.split(",")
             content_type = re.findall(r'"(.*?)"', line)
@@ -37,9 +36,11 @@ class ImportLocationTypes(Job):
             if content_type:
                 content_type = content_type[0]
                 contents = line.replace(f"{re.findall(r'\"(.*)\"', line)[0]}", "").replace(",\"\"", "").split(",")
-
-            parent_type = contents[3]
-            ne_stable = contents[2]
+                parent_type = contents[3]
+                ne_stable = contents[2]
+            else:
+                parent_type = contents[4]
+                ne_stable = contents[3]
 
             # child_object = LocationType.objects.get_or_create(name=contents[0])
             parent_obj = LocationType.objects.get_or_create(name=parent_type)
