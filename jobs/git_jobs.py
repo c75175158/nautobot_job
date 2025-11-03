@@ -41,9 +41,9 @@ class ImportLocationTypes(Job):
             # child_object = LocationType.objects.get_or_create(name=contents[0])
             parent_obj = LocationType.objects.get_or_create(name=parent_type)
 
-            self.logger.info(content_type)
+            # self.logger.info(content_type)
             self.logger.info(contents[0])
-            self.logger.info(parent_obj[1])
+            # self.logger.info(parent_obj[1])
 
             if parent_type != 'NoObject':
 
