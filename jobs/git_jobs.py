@@ -49,7 +49,7 @@ class ImportLocationTypes(Job):
 
                 self.logger.info(parent_obj[1])
 
-                if not parent_obj[1] and parent_type != 'NoObject':
+                if parent_type != 'NoObject':
 
                     self.logger.info('No Parent Type')
 
