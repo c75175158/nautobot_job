@@ -30,7 +30,6 @@ class ImportLocationTypes(Job):
         for line in lines[1:]:
 
             self.logger.info(line)
-            contents = line.split(",")
             content_type = re.findall(r'"(.*?)"', line)
 
             if content_type:
@@ -39,6 +38,7 @@ class ImportLocationTypes(Job):
                 parent_type = contents[3]
                 ne_stable = contents[2]
             else:
+                contents = line.split(",")
                 parent_type = contents[4]
                 ne_stable = contents[3]
 
@@ -49,7 +49,7 @@ class ImportLocationTypes(Job):
             self.logger.info(parent_type)
             # self.logger.info(parent_obj[1])
 
-            if parent_type != 'NoObject':
+            if parent_type != 'No Object':
 
                 self.logger.info('No Parent Type')
 
@@ -69,7 +69,7 @@ class ImportLocationTypes(Job):
 
                 self.logger.info('No Object')
 
-                if not parent_type[1] and parent_type != 'NoObject':
+                if not parent_type[1] and parent_type != 'No Object':
 
                     payload = {
                         "name": contents[0],
