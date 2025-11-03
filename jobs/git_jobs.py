@@ -68,6 +68,8 @@ class ImportLocationTypes(Job):
 
             else:
 
+                self.logger.info(ne_stable)
+
                 self.logger.info('NoObject')
 
                 if not parent_type[1] and parent_type != 'NoObject':
