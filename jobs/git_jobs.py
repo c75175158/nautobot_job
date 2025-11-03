@@ -1,7 +1,6 @@
 import logging
 import re
-from email._header_value_parser import ContentType
-
+from django.contrib.contenttypes.models import ContentType
 from nautobot.apps.jobs import Job, register_jobs, FileVar
 from nautobot.dcim.models import Device, Location, DeviceType, LocationType, Rack
 from nautobot.extras.models import Role, Status
@@ -27,7 +26,6 @@ class ImportLocationTypes(Job):
         self.logger.info("Parsing of the lines")
 
         convert = {'TRUE': True, 'FALSE': False, 'true': True, 'false': False}
-        mapping = {"dcim.device": Device, "dcim.location": Location, "dcim.locationtype": LocationType}
 
         for line in lines[1:]:
 
@@ -69,7 +67,9 @@ class ImportLocationTypes(Job):
 
                 if content_type != 'NoObject':
                     if len(content_type) > 0:
-                        classes = [ContentType.objects.get_for_model(mapping[i]) for i in content_type[0].split(",")]
+                        classes = [ContentType.objects.get_for_model(app_label=i.split(".")[0], model=i.split(".")[1])
+                                   for i in
+                                   content_type[0].split(",")]
                         location_type.content_types.set(classes)
 
             else:
@@ -89,7 +89,7 @@ class ImportLocationTypes(Job):
 
                     if content_type != 'NoObject':
                         if len(content_type) > 0:
-                            classes = [ContentType.objects.get_for_model(mapping[i]) for i in
+                            classes = [ContentType.objects.get_for_model(app_label=i.split(".")[0], model=i.split(".")[1]) for i in
                                        content_type[0].split(",")]
                             location_type.content_types.set(classes)
 
