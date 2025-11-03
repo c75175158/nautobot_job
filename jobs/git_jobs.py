@@ -6,6 +6,7 @@ from nautobot.dcim.models import Device, Location, DeviceType, LocationType
 from nautobot.extras.models import Role, Status
 
 
+
 class ImportLocationTypes(Job):
     class Meta:
         name = "CSV File Upload and Process"
@@ -54,11 +55,11 @@ class ImportLocationTypes(Job):
                     # "nestable": convert[ne_stable],
                 }
 
+                location_type = LocationType.objects.create(**payload)
+
                 if content_type != 'NoObject':
                     if len(content_type) > 0:
-                        payload["content_types"] = content_type[0].split(",")
-
-                LocationType.objects.create(**payload)
+                        location_type.content_types.set(content_type[0].split(","))
 
             else:
 
@@ -71,11 +72,11 @@ class ImportLocationTypes(Job):
                         # "nestable": convert[ne_stable],
                     }
 
+                    location_type = LocationType.objects.create(**payload)
+
                     if content_type != 'NoObject':
                         if len(content_type) > 0:
-                            payload["content_types"] = content_type[0].split(",")
-
-                    LocationType.objects.create(**payload)
+                            location_type.content_types.set(content_type[0].split(","))
 
 
 
