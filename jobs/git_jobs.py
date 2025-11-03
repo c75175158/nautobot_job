@@ -55,7 +55,7 @@ class ImportLocationTypes(Job):
 
                     payload = {
                         "name": contents[0],
-                        "parent": parent_type,
+                        "parent": parent_obj,
                         "nestable": convert[ne_stable],
                     }
 
