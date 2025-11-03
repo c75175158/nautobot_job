@@ -57,7 +57,7 @@ class ImportLocationTypes(Job):
                 payload = {
                     "name": contents[0],
                     "parent": LocationType.objects.get(name=parent_type),
-                    "nestable": convert[ne_stable],
+                    "nestable": ne_stable,
                 }
 
                 location_type = LocationType.objects.create(**payload)
@@ -74,7 +74,7 @@ class ImportLocationTypes(Job):
 
                     payload = {
                         "name": contents[0],
-                        "nestable": convert[ne_stable],
+                        "nestable": ne_stable,
                     }
 
                     location_type = LocationType.objects.create(**payload)
