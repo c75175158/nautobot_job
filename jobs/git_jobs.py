@@ -55,9 +55,9 @@ class ImportLocationTypes(Job):
                         "nestable": convert[ne_stable],
                     }
 
-                    if content_type != 'NoObject':
-                        if len(content_type) > 0:
-                            payload["content_types"] = content_type[0].split(",")
+                    # if content_type != 'NoObject':
+                    #     if len(content_type) > 0:
+                    #         payload["content_types"] = content_type[0].split(",")
 
                     LocationType.objects.create(**payload)
 
