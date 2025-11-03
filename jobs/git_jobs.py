@@ -50,8 +50,6 @@ class ImportLocationTypes(Job):
 
             if parent_type != 'NoObject':
 
-                LocationType.objects.get_or_create(name=parent_type)
-
                 self.logger.info('No Parent Type')
 
                 payload = {
