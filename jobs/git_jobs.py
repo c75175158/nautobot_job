@@ -103,18 +103,21 @@ class ImportLocation(Job):
             location = line.split(",")
             self.logger.info(location)
 
-            Location.objects.get_or_create(
+            parent = Location.objects.get_or_create(
                 name=location[0],
+                status="active"
             )
 
-            Location.objects.get_or_create(
+            oldest = Location.objects.get_or_create(
                 name=location[2],
-                parent=location[0]
+                parent=parent,
+                status="active"
             )
 
             Location.objects.get_or_create(
                 name=location[1],
-                parent=location[2]
+                parent=oldest,
+                status="active"
             )
 
 register_jobs(
