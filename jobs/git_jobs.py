@@ -56,7 +56,8 @@ class ImportLocationTypes(Job):
                     }
 
                     if content_type != 'NoObject':
-                        payload["content_types"] = content_type[0].split(",")
+                        if len(content_type) > 0:
+                            payload["content_types"] = content_type[0].split(",")
 
                     LocationType.objects.create(**payload)
 
@@ -72,7 +73,8 @@ class ImportLocationTypes(Job):
                         }
 
                         if content_type != 'NoObject':
-                            payload["content_types"] = content_type[0].split(",")
+                            if len(content_type) > 0:
+                                payload["content_types"] = content_type[0].split(",")
 
                         LocationType.objects.create(**payload)
 
