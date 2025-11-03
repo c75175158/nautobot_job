@@ -36,7 +36,7 @@ class ImportLocationTypes(Job):
 
             if content_type:
                 content_type = content_type[0]
-                contents = line.replace(f"{re.findall(r'\"(.*)\"', line)[0]}", "").replace(",\"\"", "")
+                contents = line.replace(f"{re.findall(r'\"(.*)\"', line)[0]}", "").replace(",\"\"", "").split(",")
 
             parent_type = contents[4]
             ne_stable = contents[3]
