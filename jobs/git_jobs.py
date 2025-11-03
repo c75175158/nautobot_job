@@ -79,21 +79,19 @@ class ImportLocationTypes(Job):
 
                 self.logger.info('NoObject')
 
-                if not parent_type[1] and parent_type != 'NoObject':
+                payload = {
+                    "name": contents[0],
+                    "nestable": ne_stable,
+                    "description": contents[1],
+                }
 
-                    payload = {
-                        "name": contents[0],
-                        "nestable": ne_stable,
-                        "description": contents[1],
-                    }
+                location_type = LocationType.objects.get_or_create(**payload)
 
-                    location_type = LocationType.objects.get_or_create(**payload)
-
-                    if content_type != 'NoObject':
-                        if len(content_type) > 0:
-                            classes = [ContentType.objects.get(app_label=i.split(".")[0], model=i.split(".")[1]) for i in
-                                       content_type.split(",")]
-                            location_type.content_types.set(classes)
+                if content_type != 'NoObject':
+                    if len(content_type) > 0:
+                        classes = [ContentType.objects.get(app_label=i.split(".")[0], model=i.split(".")[1]) for i in
+                                   content_type.split(",")]
+                        location_type.content_types.set(classes)
 
 
 
