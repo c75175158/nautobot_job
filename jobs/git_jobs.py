@@ -51,7 +51,7 @@ class ImportLocationTypes(Job):
                 self.logger.info(parent_obj[1])
                 self.logger.info(payload)
 
-                if not parent_obj[0] and parent_type != 'NoObject':
+                if not parent_obj[1] and parent_type != 'NoObject':
 
                     payload = {
                         "name": contents[0],
