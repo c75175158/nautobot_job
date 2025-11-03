@@ -67,7 +67,7 @@ class ImportLocationTypes(Job):
 
                 if content_type != 'NoObject':
                     if len(content_type) > 0:
-                        classes = [ContentType.objects.get_for_model(app_label=i.split(".")[0], model=i.split(".")[1])
+                        classes = [ContentType.objects.get(app_label=i.split(".")[0], model=i.split(".")[1])
                                    for i in
                                    content_type.split(",")]
                         location_type.content_types.set(classes)
@@ -89,7 +89,7 @@ class ImportLocationTypes(Job):
 
                     if content_type != 'NoObject':
                         if len(content_type) > 0:
-                            classes = [ContentType.objects.get_for_model(app_label=i.split(".")[0], model=i.split(".")[1]) for i in
+                            classes = [ContentType.objects.get(app_label=i.split(".")[0], model=i.split(".")[1]) for i in
                                        content_type.split(",")]
                             location_type.content_types.set(classes)
 
