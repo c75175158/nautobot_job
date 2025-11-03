@@ -2,7 +2,7 @@ import logging
 import re
 from django.contrib.contenttypes.models import ContentType
 from nautobot.apps.jobs import Job, register_jobs, FileVar
-from nautobot.dcim.models import Device, Location, DeviceType, LocationType, Rack
+from nautobot.dcim.models import Device, DeviceType, LocationType, Rack, Location
 from nautobot.extras.models import Role, Status
 from nautobot.ipam.models import Prefix
 
@@ -20,16 +20,12 @@ class ImportLocationTypes(Job):
     def run(self, file):
 
         file_contents = file.read().decode("utf-8")
-        self.logger.info(file_contents)
         lines = file_contents.splitlines()
-        self.logger.info(lines)
-        self.logger.info("Parsing of the lines")
 
         convert = {'TRUE': True, 'FALSE': False, 'true': True, 'false': False}
 
         for line in lines[1:]:
 
-            self.logger.info(line)
             content_type = re.findall(r'"(.*?)"', line)
 
             if content_type:
@@ -42,20 +38,12 @@ class ImportLocationTypes(Job):
                 parent_type = contents[4]
                 ne_stable = convert[contents[3]]
 
-            # child_object = LocationType.objects.get_or_create(name=contents[0])
-
-            self.logger.info(content_type)
-            self.logger.info(parent_type)
-            # self.logger.info(parent_obj[1])
-
             if parent_type != 'NoObject':
 
                 try:
                     LocationType.objects.get_or_create(name=parent_type, nestable=ne_stable)[0]
                 except Exception as e:
                     pass
-
-                self.logger.info('No Parent Type')
 
                 payload = {
                     "name": contents[0],
@@ -95,6 +83,42 @@ class ImportLocationTypes(Job):
 
 
 
+
+class ImportLocation(Job):
+    class Meta:
+        name = "CSV File Upload and Process"
+        description = "Please select a CSV file for upload"
+
+    file = FileVar(
+        description="CSV File to upload",
+    )
+
+    def run(self, file):
+
+        file_contents = file.read().decode("utf-8")
+        lines = file_contents.splitlines()
+
+        for line in lines[1:]:
+            location = line.split(",")
+
+            Location.objects.get_or_create(
+                name=location[0],
+                status='Active',
+            )
+
+            Location.objects.get_or_create(
+                name=location[2],
+                status='Active',
+                parent=location[0]
+            )
+
+            Location.objects.get_or_create(
+                name=location[1],
+                status='Active',
+                parent=location[2]
+            )
+
 register_jobs(
     ImportLocationTypes,
+    ImportLocation,
 )
