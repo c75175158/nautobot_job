@@ -31,6 +31,7 @@ class ImportLocationTypes(Job):
             try:
 
                 self.logger.info(line)
+                payload = {}
                 pattern = r'"(.*?)"'
                 contents = line.split(",")
                 parent_type = contents[4]
@@ -44,20 +45,33 @@ class ImportLocationTypes(Job):
                 self.logger.info(content_type)
                 self.logger.info(contents[0])
 
-                payload =  {
-                     "name":  contents[0],
-                     "parent": parent_obj,
-                     "nestable": convert[ne_stable],
-                }
-
                 if content_type:
                     payload["content_types"] = content_type[0].split(",")
 
                 self.logger.info(parent_obj[1])
                 self.logger.info(payload)
 
-                if not parent_obj[0]:
+                if not parent_obj[0] and parent_type != 'NoObject':
+
+                    payload = {
+                        "name": contents[0],
+                        "parent": parent_obj,
+                        "nestable": convert[ne_stable],
+                    }
+
                     LocationType.objects.update(**payload)
+
+                if  parent_type == 'NoObject':
+
+                    payload = {
+                        "name": contents[0],
+                        "nestable": convert[ne_stable],
+                    }
+
+                    if content_type:
+                        payload["content_types"] = content_type[0].split(",")
+
+                    LocationType.objects.create(**payload)
 
             except Exception as e:
                 self.logger.info(f'Failed to parse line "{e}"', exc_info=True)
