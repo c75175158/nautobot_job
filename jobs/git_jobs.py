@@ -31,12 +31,15 @@ class ImportLocationTypes(Job):
 
 
             self.logger.info(line)
-            payload = {}
-            pattern = r'"(.*?)"'
             contents = line.split(",")
+            content_type = re.findall(r'"(.*?)"', line)
+
+            if content_type:
+                content_type = content_type[0]
+                contents = line.replace(f"{re.findall(r'\"(.*)\"', line)[0]}", "").replace(",\"\"", "")
+
             parent_type = contents[4]
             ne_stable = contents[3]
-            content_type = re.findall(pattern, line)
 
             # child_object = LocationType.objects.get_or_create(name=contents[0])
             parent_obj = LocationType.objects.get_or_create(name=parent_type)
