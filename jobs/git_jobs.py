@@ -33,7 +33,7 @@ class ImportLocationTypes(Job):
             content_type = re.findall(r'"(.*?)"', line)
 
             if content_type:
-                content_type = content_type[0].replace('.', '|')
+                content_type = content_type[0]
                 contents = line.replace(f"{re.findall(r'\"(.*)\"', line)[0]}", "").replace(",\"\"", "").split(",")
                 parent_type = contents[3]
                 ne_stable = convert[contents[2]]
@@ -67,7 +67,7 @@ class ImportLocationTypes(Job):
 
                 if content_type != 'NoObject':
                     if len(content_type) > 0:
-                        location_type.content_types.set(content_type[0].split(","))
+                        location_type.content_types.set(content_type[0].replace('.', '|').split(","))
 
             else:
 
@@ -86,7 +86,7 @@ class ImportLocationTypes(Job):
 
                     if content_type != 'NoObject':
                         if len(content_type) > 0:
-                            location_type.content_types.set(content_type[0].split(","))
+                            location_type.content_types.set(content_type[0].replace('.', '|').split(","))
 
 
 
