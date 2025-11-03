@@ -39,7 +39,7 @@ class ImportLocationTypes(Job):
                 content_type = re.findall(pattern, line)
 
                 # child_object = LocationType.objects.get_or_create(name=contents[0])
-                parent_obj = LocationType.objects.get_or_create(name=parent_type)
+                parent_obj = LocationType.objects.get(name=parent_type)
 
                 self.logger.info(content_type)
                 self.logger.info(contents[0])
@@ -49,7 +49,7 @@ class ImportLocationTypes(Job):
 
                 self.logger.info(parent_obj[1])
 
-                if parent_type != 'NoObject':
+                if not parent_obj[1] and parent_type != 'NoObject':
 
                     self.logger.info('No Parent Type')
 
