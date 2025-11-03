@@ -38,8 +38,8 @@ class ImportLocationTypes(Job):
                 content_type = content_type[0]
                 contents = line.replace(f"{re.findall(r'\"(.*)\"', line)[0]}", "").replace(",\"\"", "").split(",")
 
-            parent_type = contents[4]
-            ne_stable = contents[3]
+            parent_type = contents[3]
+            ne_stable = contents[2]
 
             # child_object = LocationType.objects.get_or_create(name=contents[0])
             parent_obj = LocationType.objects.get_or_create(name=parent_type)
@@ -55,7 +55,7 @@ class ImportLocationTypes(Job):
                 payload = {
                     "name": contents[0],
                     "parent": LocationType.objects.get(name=parent_type),
-                    # "nestable": convert[ne_stable],
+                    "nestable": convert[ne_stable],
                 }
 
                 location_type = LocationType.objects.create(**payload)
@@ -72,7 +72,7 @@ class ImportLocationTypes(Job):
 
                     payload = {
                         "name": contents[0],
-                        # "nestable": convert[ne_stable],
+                        "nestable": convert[ne_stable],
                     }
 
                     location_type = LocationType.objects.create(**payload)
