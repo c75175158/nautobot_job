@@ -55,7 +55,7 @@ class ImportLocationTypes(Job):
 
                 self.logger.info(parent_obj)
 
-                if not parent_obj:
+                if not parent_obj[0]:
                     LocationType.objects.update(**payload)
 
             except Exception as e:
