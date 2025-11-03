@@ -98,7 +98,7 @@ class ImportLocation(Job):
         file_contents = file.read().decode("utf-8")
         lines = file_contents.splitlines()
 
-        self.logger.info('lines')
+        self.logger.info(lines)
 
         for line in lines[1:]:
             location = line.split(",")
