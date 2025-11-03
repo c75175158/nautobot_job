@@ -51,7 +51,7 @@ class ImportLocationTypes(Job):
             if parent_type != 'NoObject':
 
                 try:
-                    LocationType.objects.get_or_create(name=parent_type, nestable=ne_stable)
+                    LocationType.objects.get_or_create(name=parent_type, nestable=ne_stable, description=contents[1])[0]
                 except Exception as e:
                     pass
 
