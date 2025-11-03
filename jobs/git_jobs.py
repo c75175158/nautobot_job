@@ -50,7 +50,10 @@ class ImportLocationTypes(Job):
 
             if parent_type != 'NoObject':
 
-                LocationType.objects.get_or_create(name=parent_type, nestable=ne_stable)
+                try:
+                    LocationType.objects.get_or_create(name=parent_type, nestable=ne_stable)
+                except Exception as e:
+                    pass
 
                 self.logger.info('No Parent Type')
 
