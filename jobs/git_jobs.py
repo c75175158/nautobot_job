@@ -53,7 +53,7 @@ class ImportLocationTypes(Job):
                 if content_type:
                     payload["content_types"] = content_type[0].split(",")
 
-                self.logger.info(payload)
+                self.logger.info(parent_obj)
 
                 if not parent_obj:
                     LocationType.objects.update(**payload)
