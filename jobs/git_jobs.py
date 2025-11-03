@@ -1,9 +1,11 @@
 import logging
 import re
+from email._header_value_parser import ContentType
 
 from nautobot.apps.jobs import Job, register_jobs, FileVar
-from nautobot.dcim.models import Device, Location, DeviceType, LocationType
+from nautobot.dcim.models import Device, Location, DeviceType, LocationType, Rack
 from nautobot.extras.models import Role, Status
+from nautobot.ipam.models import Prefix
 
 
 
@@ -22,10 +24,10 @@ class ImportLocationTypes(Job):
         self.logger.info(file_contents)
         lines = file_contents.splitlines()
         self.logger.info(lines)
-
         self.logger.info("Parsing of the lines")
 
         convert = {'TRUE': True, 'FALSE': False, 'true': True, 'false': False}
+        mapping = {"dcim.device": Device, "dcim.location": Location, "dcim.locationtype": LocationType}
 
         for line in lines[1:]:
 
@@ -67,7 +69,8 @@ class ImportLocationTypes(Job):
 
                 if content_type != 'NoObject':
                     if len(content_type) > 0:
-                        location_type.content_types.set(content_type[0].replace('.', '|').split(","))
+                        classes = [ContentType.objects.get_for_model(mapping[i]) for i in content_type[0].split(",")]
+                        location_type.content_types.set(classes)
 
             else:
 
@@ -86,7 +89,9 @@ class ImportLocationTypes(Job):
 
                     if content_type != 'NoObject':
                         if len(content_type) > 0:
-                            location_type.content_types.set(content_type[0].replace('.', '|').split(","))
+                            classes = [ContentType.objects.get_for_model(mapping[i]) for i in
+                                       content_type[0].split(",")]
+                            location_type.content_types.set(classes)
 
 
 
