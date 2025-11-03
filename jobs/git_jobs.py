@@ -64,15 +64,17 @@ class ImportLocationTypes(Job):
 
                     self.logger.info('No Object')
 
-                    payload = {
-                        "name": contents[0],
-                        "nestable": convert[ne_stable],
-                    }
+                    if not parent_type[1]:
 
-                    if content_type:
-                        payload["content_types"] = content_type[0].split(",")
+                        payload = {
+                            "name": contents[0],
+                            "nestable": convert[ne_stable],
+                        }
 
-                    LocationType.objects.create(**payload)
+                        if content_type:
+                            payload["content_types"] = content_type[0].split(",")
+
+                        LocationType.objects.create(**payload)
 
             except Exception as e:
                 self.logger.info(f'Failed to parse line "{e}"', exc_info=True)
