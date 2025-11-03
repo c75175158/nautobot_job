@@ -36,11 +36,11 @@ class ImportLocationTypes(Job):
                 content_type = content_type[0]
                 contents = line.replace(f"{re.findall(r'\"(.*)\"', line)[0]}", "").replace(",\"\"", "").split(",")
                 parent_type = contents[3]
-                ne_stable = contents[2]
+                ne_stable = convert[contents[2]]
             else:
                 contents = line.split(",")
                 parent_type = contents[4]
-                ne_stable = contents[3]
+                ne_stable = convert[contents[3]]
 
             # child_object = LocationType.objects.get_or_create(name=contents[0])
 
