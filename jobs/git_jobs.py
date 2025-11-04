@@ -98,11 +98,6 @@ class ImportLocation(Job):
         file_contents = file.read().decode("utf-8")
         lines = file_contents.splitlines()
 
-        try:
-            loc_type = LocationType.objects.get(name="Data Center")
-        except Exception as e:
-            pass
-
         for line in lines[1:]:
 
             location = line.split(",")
@@ -110,7 +105,7 @@ class ImportLocation(Job):
 
             parent = Location.objects.get_or_create(
                 name=location[0],
-                location_type= loc_type
+                location_type= LocationType.objects.get(name="Data Center")
             )
 
             # oldest = Location.objects.get_or_create(
