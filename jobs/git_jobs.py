@@ -120,7 +120,7 @@ class ImportLocation(Job):
 
 
             Location.objects.create(
-                    name=location[2],
+                    name=location[2] if not states.get(location[2]) else states.get(location[2]),
                     parent=parent,
                     status=status,
                     location_type=LocationType.objects.get(name="State"),
