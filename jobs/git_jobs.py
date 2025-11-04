@@ -141,6 +141,9 @@ class ImportLocation(Job):
 
                 )
             else:
+
+                self.logger.info(f"More Older: {location[2]}")
+
                 Location.objects.create(
                     name=location[1],
                     parent=oldest_locations.last(),
