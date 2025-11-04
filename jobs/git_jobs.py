@@ -118,7 +118,8 @@ class ImportLocation(Job):
 
             parent = Location.objects.get(name=location[0])
 
-            try:
+            if Location.objects.filter(name=location[2]).count() < 1:
+
                 create = Location.objects.create(
                     name=location[2],
                     parent=parent,
@@ -126,8 +127,7 @@ class ImportLocation(Job):
                     location_type=LocationType.objects.get(name="State"),
 
                 )
-            except Exception as e:
-                pass
+
 
             try:
                 Location.objects.get_or_create(
