@@ -102,11 +102,13 @@ class ImportLocation(Job):
 
             location = line.split(",")
             self.logger.info(location)
+            location_type = location[0].split("-")[-1]
+            states = {'CA': 'California', 'VA': 'Virginia'}
 
             parent = Location.objects.get_or_create(
                 name=location[0],
                 status=Status.objects.get(name="Active") ,
-                location_type= LocationType.objects.get(name="Data Center")
+                location_type= LocationType.objects.get(name="Data Center") if location_type == 'BR' else LocationType.objects.get(name="Branch"),
             )
 
             # oldest = Location.objects.get_or_create(
