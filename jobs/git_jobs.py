@@ -142,13 +142,27 @@ class ImportLocation(Job):
 
                 self.logger.info(f"More Older: {location}")
 
-                Location.objects.create(
-                    name=location[1],
-                    parent=oldest_locations.last(),
-                    status=status,
-                    location_type=LocationType.objects.get(name="City"),
+                city_locations = Location.objects.filter(name=location[1])
 
-                )
+                if city_locations.count() < 1:
+
+                    Location.objects.create(
+
+                        name=location[1],
+                        parent=oldest_locations.last(),
+                        status=status,
+                        location_type=LocationType.objects.get(name="City"),
+
+                    )
+                else:
+                    Location.objects.create(
+
+                        name=city_locations.last(),
+                        parent=oldest_locations.last(),
+                        status=status,
+                        location_type=LocationType.objects.get(name="City"),
+
+                    )
 
 
 
