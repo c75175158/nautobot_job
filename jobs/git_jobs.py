@@ -98,10 +98,6 @@ class ImportLocation(Job):
         file_contents = file.read().decode("utf-8")
         lines = file_contents.splitlines()
 
-        from nautobot.dcim.models import Location, LocationType
-        from nautobot.extras.models import Status
-        from nautobot.utilities.utils import slugify  # Import slugify utility
-
         # --- 1. Pre-fetch common objects outside the loop for efficiency ---
         try:
             STATUS_ACTIVE = Status.objects.get(name="Active")
@@ -137,7 +133,6 @@ class ImportLocation(Job):
                 defaults={
                     'status': STATUS_ACTIVE,
                     'location_type': site_location_type,
-                    'slug': slugify(site_name),
                 }
             )
             self.logger.info(
@@ -151,7 +146,6 @@ class ImportLocation(Job):
                 defaults={
                     'status': STATUS_ACTIVE,
                     'location_type': TYPE_STATE,
-                    'slug': slugify(state_full_name),
                 }
             )
             self.logger.info(
@@ -165,7 +159,6 @@ class ImportLocation(Job):
                 defaults={
                     'status': STATUS_ACTIVE,
                     'location_type': TYPE_CITY,
-                    'slug': slugify(city_name),
                 }
             )
             self.logger.info(
