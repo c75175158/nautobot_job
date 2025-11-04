@@ -105,20 +105,19 @@ class ImportLocation(Job):
 
             parent = Location.objects.get_or_create(
                 name=location[0],
-                status="active"
             )
 
-            oldest = Location.objects.get_or_create(
-                name=location[2],
-                parent=parent,
-                status="active"
-            )
-
-            Location.objects.get_or_create(
-                name=location[1],
-                parent=oldest,
-                status="active"
-            )
+            # oldest = Location.objects.get_or_create(
+            #     name=location[2],
+            #     parent=parent,
+            #     status="active"
+            # )
+            #
+            # Location.objects.get_or_create(
+            #     name=location[1],
+            #     parent=oldest,
+            #     status="active"
+            # )
 
 register_jobs(
     ImportLocationTypes,
