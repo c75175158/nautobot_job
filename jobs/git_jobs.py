@@ -98,61 +98,78 @@ class ImportLocation(Job):
         file_contents = file.read().decode("utf-8")
         lines = file_contents.splitlines()
 
+        from nautobot.dcim.models import Location, LocationType
+        from nautobot.extras.models import Status
+        from nautobot.utilities.utils import slugify  # Import slugify utility
+
+        # --- 1. Pre-fetch common objects outside the loop for efficiency ---
+        try:
+            STATUS_ACTIVE = Status.objects.get(name="Active")
+            TYPE_DC = LocationType.objects.get(name="Data Center")
+            TYPE_BR = LocationType.objects.get(name="Branch")
+            TYPE_STATE = LocationType.objects.get(name="State")
+            TYPE_CITY = LocationType.objects.get(name="City")
+        except (Status.DoesNotExist, LocationType.DoesNotExist) as e:
+            self.logger.error(f"Missing required LocationType or Status: {e}")
+            return  # Exit job if required objects aren't configured
+
+        states_map = {'CA': 'California', 'VA': 'Virginia', "NJ": "New Jersey", "IL": "Illinois"}
+
         for line in lines[1:]:
+            location_data = line.strip().split(",")  # Use .strip() to remove newlines
 
-            location = line.split(",")
-            self.logger.info(location)
-            location_type = location[0].split("-")[-1]
-            states = {'CA': 'California', 'VA': 'Virginia', "NJ": "New Jersey", "IL": "Illinois"}
-            status = Status.objects.get(name="Active")
-            locations = location[2] if not states.get(location[2]) else states.get(location[2])
-            self.logger.info(location_type)
+            # Extract data from the row
+            site_name = location_data[0]
+            city_name = location_data[1]
+            state_abbreviation = location_data[2]
 
-            parent = Location.objects.get_or_create(
-                name=location[0],
-                status=status ,
-                location_type= LocationType.objects.get(name="Data Center") if location_type == 'BR' else LocationType.objects.get(name="Branch"),
+            state_full_name = states_map.get(state_abbreviation, state_abbreviation)
+
+            # Determine the type of the site itself (DC or Branch) based on its suffix
+            site_type_suffix = site_name.split("-")[-1]
+            site_location_type = TYPE_DC if site_type_suffix == 'DC' else TYPE_BR
+
+            # --- 2. Resolve the Top-Level Site Location (e.g., "Den-DC") ---
+            # Use get_or_create to prevent "unique constraint" errors if run multiple times
+            site_obj, created = Location.objects.get_or_create(
+                name=site_name,
+                # A top-level site has no parent, so we only need name and type for uniqueness
+                defaults={
+                    'status': STATUS_ACTIVE,
+                    'location_type': site_location_type,
+                    'slug': slugify(site_name),
+                }
             )
+            self.logger.info(
+                f"Site Location Resolved ({'Created' if created else 'Existing'}): {site_obj.name} (UUID: {site_obj.id})")
 
-            self.logger.info(f"Parent Location: {parent}")
+            # --- 3. Resolve the State Location (Parent is now the site_obj) ---
+            # This combination of (name=state_full_name, parent=site_obj) must be unique
+            state_obj, created = Location.objects.get_or_create(
+                name=state_full_name,
+                parent=site_obj,  # Link to the unique site object UUID
+                defaults={
+                    'status': STATUS_ACTIVE,
+                    'location_type': TYPE_STATE,
+                    'slug': slugify(state_full_name),
+                }
+            )
+            self.logger.info(
+                f"State Location Resolved ({'Created' if created else 'Existing'}): {state_obj.name} (Parent: {site_obj.name})")
 
-            parent = Location.objects.get(name=location[0])
-
-            Location.objects.create(
-                    name=locations,
-                    parent=parent,
-                    status=status,
-                    location_type=LocationType.objects.get(name="State"),
-
-                )
-
-            self.logger.info(f"Older Location: {location}")
-
-            oldest_locations = Location.objects.filter(name=locations)
-
-            if oldest_locations.count() < 1:
-                Location.objects.create(
-                    name=location[1] ,
-                    parent=Location.objects.get(name=locations),
-                    status=status,
-                    location_type=LocationType.objects.get(name="City"),
-
-                )
-            else:
-
-                self.logger.info(f"More Older: {location}")
-                oldest_locations = Location.objects.filter(name=locations)
-
-                Location.objects.create(
-
-                    name=location[1],
-                    parent=oldest_locations.last(),
-                    status=status,
-                    location_type=LocationType.objects.get(name="City"),
-
-                )
-
-
+            # --- 4. Resolve the City Location (Parent is now the state_obj) ---
+            # This combination of (name=city_name, parent=state_obj) must be unique
+            city_obj, created = Location.objects.get_or_create(
+                name=city_name,
+                parent=state_obj,  # Link to the unique state object UUID
+                defaults={
+                    'status': STATUS_ACTIVE,
+                    'location_type': TYPE_CITY,
+                    'slug': slugify(city_name),
+                }
+            )
+            self.logger.info(
+                f"City Location Resolved ({'Created' if created else 'Existing'}): {city_obj.name} (Parent: {state_obj.name})")
 
 
 register_jobs(
