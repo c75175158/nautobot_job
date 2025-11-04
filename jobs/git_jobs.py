@@ -129,16 +129,15 @@ class ImportLocation(Job):
                 )
 
 
-            try:
+            if Location.objects.filter(name=location[1] if not states.get(location[1]) else states.get(location[1])).count() <= 1:
                 Location.objects.get_or_create(
                     name=location[1] if not states.get(location[1]) else states.get(location[1]) ,
                     parent=Location.objects.get(name=location[2]),
                     status=status,
-                    location_type=LocationType.objects.get(name="State"),
+                    location_type=LocationType.objects.get(name="City"),
 
                 )
-            except Exception as e:
-                pass
+
 
 register_jobs(
     ImportLocationTypes,
