@@ -122,7 +122,7 @@ class ImportLocation(Job):
                 name=location[2],
                 parent=parent,
                 status=status,
-                location_type = LocationType.objects.get(name="City"),
+                location_type = LocationType.objects.get(name="State"),
 
             )
 
@@ -134,7 +134,7 @@ class ImportLocation(Job):
                 name=location[1] if not states.get(location[1]) else states.get(location[1]) ,
                 parent=oldest,
                 status=status,
-                location_type=LocationType.objects.get(name="State"),
+                location_type=LocationType.objects.get(name="City"),
 
             )
 
