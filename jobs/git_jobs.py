@@ -142,7 +142,7 @@ class ImportLocation(Job):
 
                 self.logger.info(f"More Older: {location}")
 
-                Location.objects.get_or_create(
+                Location.objects.create(
 
                     name=location[1],
                     parent=oldest_locations.last(),
