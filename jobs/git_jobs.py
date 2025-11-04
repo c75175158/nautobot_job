@@ -118,7 +118,7 @@ class ImportLocation(Job):
 
             parent = Location.objects.get(name=location[0])
 
-            if Location.objects.filter(name=location[2]).count() <= 1:
+            if Location.objects.filter(name=location[2]).count() < 1:
 
                 Location.objects.create(
                     name=location[2],
@@ -128,7 +128,7 @@ class ImportLocation(Job):
 
                 )
 
-            if Location.objects.filter(name=location[1]).count() <= 1:
+            if Location.objects.filter(name=location[1]).count() < 1:
                 Location.objects.create(
                     name=location[1] ,
                     parent=Location.objects.get(name=location[2]),
