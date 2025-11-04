@@ -105,7 +105,7 @@ class ImportLocation(Job):
             location_type = location[0].split("-")[-1]
             states = {'CA': 'California', 'VA': 'Virginia', "NJ": "New Jersey", "IL": "Illinois"}
             status = Status.objects.get(name="Active")
-
+            location = location[2] if not states.get(location[2]) else states.get(location[2])
             self.logger.info(location_type)
 
             parent = Location.objects.get_or_create(
@@ -120,7 +120,7 @@ class ImportLocation(Job):
 
 
             Location.objects.create(
-                    name=location[2] if not states.get(location[2]) else states.get(location[2]),
+                    name=location,
                     parent=parent,
                     status=status,
                     location_type=LocationType.objects.get(name="State"),
@@ -128,21 +128,21 @@ class ImportLocation(Job):
                 )
 
 
-            self.logger.info(f"Older Location: {location[2]}")
+            self.logger.info(f"Older Location: {location}")
 
-            oldest_locations = Location.objects.filter(name=location[2])
+            oldest_locations = Location.objects.filter(name=location)
 
             if oldest_locations.count() < 1:
                 Location.objects.create(
                     name=location[1] ,
-                    parent=Location.objects.get(name=location[2]),
+                    parent=Location.objects.get(name=location),
                     status=status,
                     location_type=LocationType.objects.get(name="City"),
 
                 )
             else:
 
-                self.logger.info(f"More Older: {location[2]}")
+                self.logger.info(f"More Older: {location}")
 
                 Location.objects.create(
                     name=location[1],
