@@ -129,13 +129,16 @@ class ImportLocation(Job):
             except Exception as e:
                 pass
 
-            Location.objects.get_or_create(
-                name=location[1] if not states.get(location[1]) else states.get(location[1]) ,
-                parent=Location.objects.get(name=location[2]),
-                status=status,
-                location_type=LocationType.objects.get(name="State"),
+            try:
+                Location.objects.get_or_create(
+                    name=location[1] if not states.get(location[1]) else states.get(location[1]) ,
+                    parent=Location.objects.get(name=location[2]),
+                    status=status,
+                    location_type=LocationType.objects.get(name="State"),
 
-            )
+                )
+            except Exception as e:
+                pass
 
 register_jobs(
     ImportLocationTypes,
