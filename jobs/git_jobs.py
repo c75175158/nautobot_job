@@ -117,16 +117,18 @@ class ImportLocation(Job):
             self.logger.info(f"Parent Location: {parent}")
 
             parent = Location.objects.get(name=location[0])
+            state = Location.objects.get(name=location[2])
 
-            oldest = Location.objects.create(
-                name=location[2],
-                parent=parent,
-                status=status,
-                location_type = LocationType.objects.get(name="State"),
+            if not state:
+                oldest = Location.objects.create(
+                    name=location[2],
+                    parent=parent,
+                    status=status,
+                    location_type = LocationType.objects.get(name="State"),
 
-            )
+                )
 
-            self.logger.info(f"Oldest Location: {oldest}")
+                self.logger.info(f"Oldest Location: {oldest}")
 
             oldest = Location.objects.get(name=location[2])
 
