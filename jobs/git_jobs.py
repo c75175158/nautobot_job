@@ -114,13 +114,19 @@ class ImportLocation(Job):
             oldest = Location.objects.get_or_create(
                 name=location[2],
                 parent=parent,
-                status=status
+                status=status,
+                location_type = LocationType.objects.get(
+                name="Data Center") if location_type == 'BR' else LocationType.objects.get(name="Branch"),
+
             )
 
             Location.objects.get_or_create(
                 name=location[1] if not states.get(location[1]) else states.get(location[1]) ,
                 parent=oldest,
-                status=status
+                status=status,
+                location_type=LocationType.objects.get(
+                    name="Data Center") if location_type == 'BR' else LocationType.objects.get(name="Branch"),
+
             )
 
 register_jobs(
