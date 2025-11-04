@@ -128,9 +128,8 @@ class ImportLocation(Job):
 
                 )
             except Exception as e:
+                self.logger.info(f"Oldest Location {e}")
                 pass
-
-                self.logger.info(f"Oldest Location: {oldest}")
 
             oldest = Location.objects.get(name=location[2])
 
