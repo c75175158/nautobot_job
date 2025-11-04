@@ -118,7 +118,6 @@ class ImportLocation(Job):
 
             parent = Location.objects.get(name=location[0])
 
-            oldest_locations = Location.objects.filter(name=location[2])
 
             Location.objects.create(
                     name=location[2],
@@ -131,7 +130,7 @@ class ImportLocation(Job):
 
             self.logger.info(f"Older Location: {location[2]}")
 
-            does_exits = Location.objects.filter(name=location[1])
+            oldest_locations = Location.objects.filter(name=location[2])
 
             if oldest_locations.count() < 1:
                 Location.objects.create(
