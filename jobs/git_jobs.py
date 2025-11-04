@@ -155,9 +155,9 @@ class ImportLocation(Job):
 
                     )
                 else:
-                    Location.objects.create(
+                    Location.objects.get_or_create(
 
-                        name=city_locations.last().name,
+                        name=location[1],
                         parent=oldest_locations.last(),
                         status=status,
                         location_type=LocationType.objects.get(name="City"),
