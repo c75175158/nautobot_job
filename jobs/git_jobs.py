@@ -117,8 +117,9 @@ class ImportLocation(Job):
             self.logger.info(f"Parent Location: {parent}")
 
             parent = Location.objects.get(name=location[0])
+            locations = Location.objects.filter(name=location[2])
 
-            if Location.objects.filter(name=location[2]).count() < 1:
+            if locations.count() < 1:
 
                 Location.objects.create(
                     name=location[2],
@@ -127,8 +128,19 @@ class ImportLocation(Job):
                     location_type=LocationType.objects.get(name="State"),
 
                 )
+            else:
+                Location.objects.create(
+                    name=locations[-1],
+                    parent=parent,
+                    status=status,
+                    location_type=LocationType.objects.get(name="State"),
 
-            if Location.objects.filter(name=location[1]).count() < 1:
+                )
+
+
+            locations = Location.objects.filter(name=location[2])
+
+            if locations.count() < 1:
                 Location.objects.create(
                     name=location[1] ,
                     parent=Location.objects.get(name=location[2]),
@@ -136,6 +148,15 @@ class ImportLocation(Job):
                     location_type=LocationType.objects.get(name="City"),
 
                 )
+            else:
+                Location.objects.create(
+                    name=location[1],
+                    parent=locations[-1],
+                    status=status,
+                    location_type=LocationType.objects.get(name="City"),
+
+                )
+
 
 
 register_jobs(
