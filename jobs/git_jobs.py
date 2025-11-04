@@ -118,21 +118,20 @@ class ImportLocation(Job):
 
             parent = Location.objects.get(name=location[0])
 
-            create = Location.objects.get_or_create(
-                name=location[2],
-                parent=parent,
-                status=status,
-                location_type=LocationType.objects.get(name="State"),
+            try:
+                create = Location.objects.create(
+                    name=location[2],
+                    parent=parent,
+                    status=status,
+                    location_type=LocationType.objects.get(name="State"),
 
-            )
-
-            self.logger.info(create)
-
-            oldest = Location.objects.get(name=location[2])
+                )
+            except Exception as e:
+                pass
 
             Location.objects.get_or_create(
                 name=location[1] if not states.get(location[1]) else states.get(location[1]) ,
-                parent=oldest,
+                parent=Location.objects.get(name=location[2]),
                 status=status,
                 location_type=LocationType.objects.get(name="State"),
 
