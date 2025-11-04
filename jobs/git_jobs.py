@@ -110,7 +110,6 @@ class ImportLocation(Job):
 
             parent = Location.objects.get_or_create(
                 name=location[0],
-                status="active",
                 location_type= loc_type
             )
 
