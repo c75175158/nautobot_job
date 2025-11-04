@@ -104,24 +104,24 @@ class ImportLocation(Job):
             self.logger.info(location)
             location_type = location[0].split("-")[-1]
             states = {'CA': 'California', 'VA': 'Virginia'}
-
+            status = Status.objects.get(name="Active")
             parent = Location.objects.get_or_create(
                 name=location[0],
-                status=Status.objects.get(name="Active") ,
+                status=status ,
                 location_type= LocationType.objects.get(name="Data Center") if location_type == 'BR' else LocationType.objects.get(name="Branch"),
             )
 
-            # oldest = Location.objects.get_or_create(
-            #     name=location[2],
-            #     parent=parent,
-            #     status="active"
-            # )
-            #
-            # Location.objects.get_or_create(
-            #     name=location[1],
-            #     parent=oldest,
-            #     status="active"
-            # )
+            oldest = Location.objects.get_or_create(
+                name=location[2],
+                parent=parent,
+                status=status
+            )
+
+            Location.objects.get_or_create(
+                name=location[1] if not states.get(location[1]) else states.get(location[1]) ,
+                parent=oldest,
+                status=status
+            )
 
 register_jobs(
     ImportLocationTypes,
